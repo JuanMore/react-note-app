@@ -1,9 +1,23 @@
-import { useState } from "react"
+import { useState, useContext, useEffect} from "react"
 import Button from "./shared/Button"
-function NoteForm({handleAdd}) {
+import NoteContext from "../context/NoteContext"
+function NoteForm() {
     const [text, setText] = useState('')
     const [btnDisabled, setBtnDisabled] = useState(true)
     const [mssg, setMssg] = useState('')
+    const {addNote, noteEdit, updateNote} = useContext(NoteContext)
+
+    // call func - takes in a callback
+    useEffect(() => {
+        if (noteEdit.edit === true) {
+            setBtnDisabled(false)
+            // set new note text 
+        setText(noteEdit.item.text)
+            
+        }
+
+        // takes in an array of dependencies
+    }, [noteEdit])
 
     const handleTextChange = (e) => {
         if (text === '') {
@@ -30,7 +44,13 @@ function NoteForm({handleAdd}) {
                 text
             }
 
-            handleAdd(newNote)
+            if (noteEdit.edit === true) {
+                updateNote(noteEdit.item.id, newNote)
+            } else {
+                // add note - called from context
+                addNote(newNote)
+            }
+           
             // clear text field
             setText('')
         }
