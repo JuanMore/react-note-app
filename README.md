@@ -1,5 +1,5 @@
 # MyNotes
-This is a basic note taking app with CRUD functionality. Built with React.js, css and json-server for mock backend.
+This is a basic note taking app with CRUD functionality. Built with React.js, css and json-server for a mock backend.
 
 ![Screen Shot 2022-01-02 at 12 50 40 AM](https://user-images.githubusercontent.com/20747118/147870877-365b773c-e850-4231-8e61-8dc62928d638.png)
 
