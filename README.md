@@ -1,3 +1,14 @@
+# MyNotes
+This is a basic note taking app with CRUD functionality. Built with React.js, css and json-server for mock backend.
+
+![Screen Shot 2022-01-02 at 12 50 40 AM](https://user-images.githubusercontent.com/20747118/147870877-365b773c-e850-4231-8e61-8dc62928d638.png)
+
+![Screen Shot 2022-01-02 at 12 48 37 AM](https://user-images.githubusercontent.com/20747118/147870881-ab18816d-0613-4da0-a367-d5e4a153a2de.png)
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
