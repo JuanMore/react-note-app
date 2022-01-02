@@ -1,20 +1,22 @@
 import NoteItem from "./NoteItem"
 import { useContext } from 'react'
 import NoteContext from '../context/NoteContext'
+import Spinner from "./shared/Spinner"
 
 function NoteList() {
-    const {note} = useContext(NoteContext)
-    if (!note || note.length === 0) {
+    const {note, isLoading} = useContext(NoteContext)
+    if (!isLoading &&  (!note || note.length === 0)){
         return <p>No Notes yet.</p>
     }
-    
-    return (
-        <div className="grid">
-                {note.map(item => (
-                <NoteItem key={item.id} item={item} />
-            ))}
-                </div>
+
+    return isLoading ? <Spinner /> : (
+            <div className="grid">
+                    {note.map(item => (
+                    <NoteItem key={item.id} item={item} />
+                ))}
+                    </div>
     )
+    
 }
 
 

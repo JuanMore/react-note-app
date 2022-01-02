@@ -1,25 +1,12 @@
-import { createContext, useState } from "react";
-import {v4 as uuidv4} from 'uuid'
+import { createContext, useState, useEffect } from "react";
 
 const NoteContext = createContext()
 
 // prover wraps children
 export const NoteProvider = ({ children }) => {
-    const [note, setNote] = useState([
-        {
-            id: 1,
-            text: 'This note number 1'
-        },
-        {
-            id: 2,
-            text: 'This note number 2'
-        },
-        {
-            id: 3,
-            text: 'This note number 3'
-        }
-    ])
-
+    // set to true until we make request
+    const [isLoading, setIsLoading] = useState(true)
+    const [note, setNote] = useState([])
      // if edit initiated boolean is set to true or 'edit mode'
     const [noteEdit, setNoteEdit] = useState({
         item: {
@@ -28,16 +15,42 @@ export const NoteProvider = ({ children }) => {
         edit: false
     })
 
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    //Fetch note data
+    const fetchData = async () => {
+        const response = await fetch(`/note?_sort=id&_order=desc`)
+        // return data as json
+        const data = await response.json()
+
+        // set data(notes) from our db
+        setNote(data)
+        // set our spinner to false
+        setIsLoading(false)
+    }
+
     // add new note to list
-    const addNote = (newNote) => {
-        newNote.id = uuidv4()
-        setNote([newNote ,...note])
+    const addNote = async (newNote) => {
+        const response = await fetch('/note', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newNote),
+        })
+
+        const data = await response.json()
+        // set note to new data from backend
+        setNote([data, ...note])
       }
 
     // remove note from list
-    const deleteNote = (id) => {
+    const deleteNote =  async (id) => {
         // display message to user
         if (window.confirm('Are you sure you want to delete?')) {
+            await fetch(`/note/${id}`, { method: 'DELETE'})
           // setNote to new array minus the note being deleted
           // item id !== to the id that is being passed in
         setNote(note.filter( item => item.id !== id))
@@ -53,11 +66,22 @@ export const NoteProvider = ({ children }) => {
     }
 
     // update note item
-    const updateNote = (id, updItem) => {
+    const updateNote = async (id, updItem) => {
+        const response = await fetch(`/note/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify(updItem)
+        })
+
+        const data = await response.json()
+
         // return array with newly updated item
         // run condition to check for updated item
         setNote(note.map((item) => item.id === id ? {
-            ...item, ...updItem
+            ...item, ...data
             // else return current item
         } : item)
         )
@@ -69,6 +93,7 @@ export const NoteProvider = ({ children }) => {
             note,
             // peice of state that holds state and boolean
             noteEdit,
+            isLoading,
             deleteNote,
             addNote,
             // function 

@@ -180,6 +180,12 @@ right: 40px;
   cursor: pointer;
 }
 
+.spinner {
+  width: 200px;
+  margin: auto;
+  display: block;
+}
+
 
 /* Media Queries */
 @media(max-width: 1200px){
